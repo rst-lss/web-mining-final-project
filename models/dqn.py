@@ -94,7 +94,7 @@ class DQNAgent:
         return loss
 
     def update(self, batch_size, verbose=False):
-        batch = self.replay_buffer.sample(batch_size)
+        batch = self.replay_buffer.sample_batch(batch_size)
         loss = self.compute_loss(batch, self.dataset, verbose)
         train_loss = loss.float()
         self.optimizer.zero_grad()

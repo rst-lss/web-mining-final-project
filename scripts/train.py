@@ -11,7 +11,7 @@ import torch
 from tqdm import tqdm
 
 from models.dqn import DQNAgent
-from models.mdp import BasicBuffer
+from models.mdp import ExperienceBuffer
 from utils.preprocess import load_letor
 
 warnings.simplefilter(action="ignore", category=UserWarning)
@@ -68,11 +68,11 @@ def main() -> None:
     )
     session_path.mkdir(parents=True, exist_ok=True)
 
-    train_buffer = BasicBuffer(30000)
-    train_buffer.push_batch(train_set, 3)
+    train_buffer = ExperienceBuffer(30000)
+    train_buffer.add_experiences_from_dataframe(train_set, 3)
 
-    val_buffer = BasicBuffer(20000)
-    val_buffer.push_batch(val_set, 3)
+    val_buffer = ExperienceBuffer(20000)
+    val_buffer.add_experiences_from_dataframe(val_set, 3)
 
     # Instantiate agent
     agent = DQNAgent(47, learning_rate=3e-4, buffer=train_buffer, dataset=train_set)
@@ -83,7 +83,7 @@ def main() -> None:
         y.append(agent.update(args.batch_size, verbose=args.verbose))
         z.append(
             agent.compute_loss(
-                val_buffer.sample(args.batch_size), val_set, verbose=args.verbose
+                val_buffer.sample_batch(args.batch_size), val_set, verbose=args.verbose
             )
         )
 

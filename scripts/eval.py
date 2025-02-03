@@ -5,7 +5,7 @@ import torch
 
 from models.dqn import DQN, DQNAgent
 from utils.eval import evaluate_agent_performance
-from utils.preprocess import load_letor_dataset
+from utils.preprocess import load_letor
 
 # Configuration constants
 DEFAULT_NDCG_POSITIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
